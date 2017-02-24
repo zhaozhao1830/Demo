@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style>
+			div{
+				width: 50px;
+				height: 50px;
+				position: absolute;
+				
+			}
+			div:nth-of-type(2){
+				left: 10px;
+			}
+		
+			#home{
+				width: 50px;
+				height: 50px;
+				background: palegoldenrod url(img/ico_1.png) no-repeat;
+				border-radius: 20%;
+				background-size: 50px;			
+				z-index: 10;
+			}
+			
+			img{
+				width: 30px;
+				height: 30px;
+				position: absolute;
+				left: 0;
+				top: 0;
+				
+				
+			}
+		</style>
+	</head>
+	<body>
+		<div id="home">
+			
+		</div>
+		<div>
+			<img src="img/ico_2.png" />
+			<img src="img/ico_3.png" />
+			<img src="img/ico_4.png" />
+			<img src="img/ico_5.png" />
+			<img src="img/ico_6.png" />
+		</div>
+		<script>
+			var home=document.getElementById("home");
+			var imgs=document.getElementsByTagName("img");
+			for(var i=0;i<imgs.length;i++){
+				imgs[i].onmouseover=function(){
+					this.style.transform="scale(2)"
+				}
+				imgs[i].onmouseout=function(){
+					this.style.transform="scale(1)"
+				}
+			}
+			onoff=false
+			home.onclick=function(){
+				if(!onoff){
+					for(var i=0;i<imgs.length;i++){
+						
+						imgs[i].style.transition=0.5+i*0.5+"s";
+						imgs[i].style.left=Math.cos((22.5*i)/180*Math.PI)*200+"px";
+						imgs[i].style.top=Math.sin((22.5*i)/180*Math.PI)*200+"px";
+						imgs[i].style.transform="rotate(-720deg)"
+					}
+				}else{
+					for(var i=0;i<imgs.length;i++){					
+						imgs[i].style.transition=0.5+i*0.5+"s";
+						imgs[i].style.left=0+"px";
+						imgs[i].style.top=0+"px";
+						imgs[i].style.transform="rotate(720deg)"
+					}
+				}
+				onoff=!onoff;
+				
+			}
+			
+		</script>
+	</body>
+</html>
