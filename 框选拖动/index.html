@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style>
+			ul{
+				margin: 0;
+				padding: 0;
+				list-style: none;
+				
+			}
+			#list{
+				width: 330px;
+				margin: 50px auto;
+			}
+			li{
+				width: 100px;
+				height: 100px;
+				background-color: pink;
+				float: left;
+				margin: 3px;
+			}
+			.box{
+				border: 1px solid #000;
+				position: absolute;
+			}
+		</style>
+	</head>
+	<body>
+		<ul id="list">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+		<script>
+		//思路：当框选到元素后，元素的开关为true.
+		//     将页面布局改成定位布局，调用拖动函数。
+		//拖动函数：当按下元素的时候，将所点击的元素开关变成true,开一个数组
+		//				遍历所有的元素，如果开关为true,push到数组中,给所有为true的元素添加自定义属性，自定义属性为disX和disY
+		
+		//		 document移动的时候，遍历数组，给数组里面的元素改变left和top值。
+		//					
+		//注意：阻止冒泡要放到return false的前面，否则会被return掉。
+		//					
+			var list=document.getElementById("list");
+			var lis=list.getElementsByTagName("li");
+			
+			choose();
+			for(var i=0;i<lis.length;i++){
+				lis[i].style.left=lis[i].offsetLeft+"px";
+				lis[i].style.top=lis[i].offsetTop+"px";
+			}
+			for(var i=0;i<lis.length;i++){
+				lis[i].style.position="absolute";
+				lis[i].style.float="none";
+				lis[i].style.margin="0"
+				drag(lis[i]);
+			}
+			function drag(obj){
+				obj.onmousedown=function(e){
+					obj.isSelected=true;
+					obj.style.background="red"
+					e.cancelBubble=true;
+					var eles=[];
+					for(var i=0;i<lis.length;i++){
+						if(lis[i].isSelected){
+							eles.push(lis[i])
+							lis[i].disX=e.clientX-lis[i].offsetLeft;
+							lis[i].disY=e.clientY-lis[i].offsetTop;
+						}
+					}
+					document.onmousemove=function(e){
+			
+						for(var i=0;i<eles.length;i++){							
+							eles[i].style.left=e.clientX-eles[i].disX+"px";
+							eles[i].style.top=e.clientY-eles[i].disY+"px";
+						}
+					}
+					document.onmouseup=function(){
+						document.onmousemove=null;
+						for(var i=0;i<lis.length;i++){
+							lis[i].style.background="pink";
+							lis[i].isSelected=false;
+						}
+					}
+					return false;
+				}
+				
+			}
+			function choose(){
+				document.onmousedown=function(e){
+					var div=document.createElement("div");
+					div.className="box";
+					var oriX=e.clientX;
+					var oriY=e.clientY;			
+					document.body.appendChild(div);
+					document.onmousemove=function(e){
+						div.style.width=Math.abs(e.clientX-oriX)+"px";
+						div.style.height=Math.abs(e.clientY-oriY)+"px";
+						div.style.left=Math.min(oriX,e.clientX)+"px";
+						div.style.top=Math.min(oriY,e.clientY)+"px";
+						for(var i=0;i<lis.length;i++){
+							if(collide(div,lis[i])){								
+								lis[i].style.background="red";
+								lis[i].isSelected=true;
+								
+							}else{
+								lis[i].style.background="pink";
+								lis[i].isSelected=false;
+							}
+						}
+					}
+					document.onmouseup=function(){
+						document.onmouseup=document.onmousemove=null;
+						document.body.removeChild(div)
+					}
+				}
+				return false
+			}
+			
+			function collide(obj1,obj2){
+				var pos1=obj1.getBoundingClientRect();
+				var pos2=obj2.getBoundingClientRect();	
+				return pos1.right>pos2.left&&pos1.left<pos2.right&&pos1.bottom>pos2.top&&pos1.top<pos2.bottom
+			}
+			
+		</script>
+	</body>
+</html>
