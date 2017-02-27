@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style>
+			textarea{
+				margin: 0;
+				padding: 0;
+				border: none;
+			}
+			ul{
+				margin: 0;
+				padding: 0 40px;
+				list-style: none;
+				overflow: hidden;			
+			}
+			#box{
+				width: 800px;
+				height: 200px;
+				border: 10px solid paleturquoise;
+				background-color: darkgray;
+				padding: 10px;
+			}
+			#left,#right{				
+				
+				border: 1px dotted #000;
+			}
+			#content{
+				width: 780px;;
+				height: 180px;
+				background-color: #fff;
+				padding: 10px;
+				
+			}
+			#left{
+				width: 300px;
+				float: left;
+				background-color: peachpuff;
+				height: 180px;
+			}
+			#right{
+				width: 280px;
+				float: right;
+				background-color: powderblue;
+				padding: 10px;
+				height: 160px;
+				text-indent: 2em;
+			}
+			#center{
+				width: 176px;
+				height: 180px;
+				float: left;
+				
+				text-align: center;
+				
+			}
+			#left textarea{
+				background-color: peachpuff ;
+				line-height: 20px;
+				text-indent: 2em;
+				padding: 10px;
+				font-size: 16px;
+				overflow: auto;
+			}
+			input{
+				width: 150px;
+				height: 30px;
+				background-color: orangered;
+				color: #fff;
+				text-align: center;
+				line-height: 30px;
+				font-size: 16px;
+				border: none;
+				margin-top: 10px;
+				
+				padding: 0;
+				margin: 0;
+			}
+			#btn{
+				margin-bottom: 15px;
+			}
+			#number{
+				margin-bottom: 15px;
+			}
+		
+			#colorLine li{
+				width: 10px;
+				height: 10px;	
+				border: 1px solid #000;			
+				float: left;
+						
+			}
+			#colorLine{
+				display: none;
+			}
+			#colorLine .active{
+				background-color: orangered;
+			}
+		</style>
+	</head>
+	<body>
+		<section id="box">
+			<div id="content">
+				<div id="left">
+					<form>
+						<textarea style="width: 280px;height: 160px;">入框,这是一个文本输入框</textarea>	
+					</form>
+				</div>
+				<div id="center">
+					<input id="btn" type="button" value="把文字右移" />
+					<div id="number">
+						<span>0</span>
+						/
+						<span>0</span>
+					</div>
+					<ul id="colorLine">
+						<li class="active"></li>
+						<li></li>
+						<li></li>
+						<li></li>
+						<li></li>
+						<li></li>
+						<li></li>
+						<li></li>
+					</ul>
+				</div>
+				<div id="right"></div>
+			</div>			
+		</section>
+		<script>
+			var btn=document.getElementById("btn");
+			var left=document.getElementById("left");
+			var right=document.getElementById("right");
+			var colorLine=document.getElementById("colorLine");
+			var lis=colorLine.getElementsByTagName("li");
+			var number1=document.getElementById("number");
+			var leftNum=number1.getElementsByTagName("span")[0];
+			var rightNum=number1.getElementsByTagName("span")[1];
+			var textArea=left.getElementsByTagName("textarea")[0];	
+			var timer=null;
+//			console.log()
+//			当点击把文字右移之后，右边div的内容增加一个左边textarea的第一个(右边的innerHTML+=左边内容的charAt(0))，
+//			左边textarea的内容的第一个去掉（可以用substring或者slice取第二位到最后一位），按钮背景颜色改变，
+//			下面色条显示出来，在全局设置一个Num＝0，每执行一次，num+1对应的小色块颜色变亮，num%=小色块的长度。
+//			数字块，左边是右边div innerHTML的长度，右边是最初textarea value的长度（所以要放在定时器外）；
+//			给定时器取名timer,当数组块左边＝右边的时候，清除定时器，并将色条隐藏起来
+
+//			再次执行文字向右移动的时候，需要清掉之前色条块内容,并将右边的内容清空
+//          
+			var num=0;
+			var onoff=false;
+			btn.onclick=function(){
+				if(!onoff){
+					right.innerHTML=""
+					rightNum.innerHTML=textArea.value.length;
+					lis[num].className="active";			//
+					this.style.background="pink";
+					timer=setInterval(function(){
+						var v=textArea.value;
+						right.innerHTML+=v.charAt(0)
+						textArea.value=v.substring(1);					
+						colorLine.style.display="block";
+						lis[num].className="";
+						num++;
+						num%=lis.length;
+						lis[num].className="active";
+						leftNum.innerHTML=right.innerHTML.length;
+						if(leftNum.innerHTML==rightNum.innerHTML){
+							lis[num].className="";//
+							clearInterval(timer);
+							num=0;	
+							colorLine.style.display="none";
+							onoff=false
+							//
+						}
+					},100)
+					onoff=true;
+				}
+				console.log(onoff)
+				
+			}
+			//总结：
+			//	1 为防止用户多次点击可以设置开关，当定时器开启的时候开关为flase,然后在末尾设置定时器为true,在定时器
+			//关闭的时候将定时器再次设为fales.
+			//	2 在num++之前将num对应的li class 清空，在num++之后给num对应的li 添加class.
+			//  3 为防止下次下次点击的时候，上次点击结束的位置还有class,可以在定时器关闭的时候，将num对应的li 的class清空
+			//并将num重置为0；
+			//	4 为防止下次点击的时候，第一个li的颜色不变化，可以在开始的时候将num＝0对应的li添加class.
+			//
+		
+		</script>
+		
+	</body>
+</html>
