@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style>
+			#btn{
+				width: 80px;
+				height: 30px;
+				background-color: darkcyan;
+				opacity: .6;
+				color: #fff;
+			}
+			#box{
+				width: 100px;
+				height: 100px;
+				background-color: yellowgreen;
+				border-radius: 20px;
+				position: absolute;
+				left: 0;
+				top: 40px;
+			}
+		</style>
+	</head>
+	<body>
+		<input type="button" id="btn" value="回放" />
+		<div id="box"></div>
+		<script>
+			var btn=document.getElementById("btn");
+			var box=document.getElementById("box");
+			var arr=[];
+			
+			box.onmousedown=function(ev){				
+				var disX=ev.clientX-box.offsetLeft;
+				var disY=ev.clientY-box.offsetTop;
+				var t1;
+				document.onmousemove=function(ev){					
+					if(!t1){
+						t1=new Date().getTime();
+					}
+					var disT=new Date().getTime()-t1;
+					box.style.left=ev.clientX-disX+"px";
+					box.style.top=ev.clientY-disY+"px";					
+					arr.push([ev.clientX-disX,ev.clientY-disY,disT]);
+					t1=new Date().getTime();
+//					console.log(disT)
+//					console.log(t1)
+				}
+				document.onmouseup=function(){
+					document.onmousemove=null;
+				}
+				return false
+			}
+			var num=0;
+			btn.onclick=function(ev){
+				ev.cancelBubble=true;
+				arr.reverse();				
+				var timer=null;								
+				timer=setInterval(function(){	
+					num++;
+					if(num==arr.length-1){
+						clearInterval(timer);
+						arr=[];
+						num=arr.length-1;
+					}
+					console.log(arr[num][0])
+					box.style.left=arr[num][0]+"px";
+					box.style.top=arr[num][1]+"px";	
+					
+					
+				},18)
+					
+				
+				
+			}
+			
+		</script>
+	</body>
+</html>
