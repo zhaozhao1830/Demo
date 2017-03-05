@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style>
+			img{
+				width: 100px;
+				height: 100px;
+				position: absolute;		
+				transition:0.5s;	
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+//			var num=0;
+//			var n=0;
+			//如何让之前的img变小到消失。
+//			document.onmousemove=function(e){
+//				num++;
+//				num%=25;                                                                                               
+//				var img=document.createElement("img");
+//				img.src="img/qun_"+Math.floor(num/5)+".png";
+//				img.style.left=e.clientX+"px";
+//				img.style.top=e.clientY+"px";
+//				document.body.appendChild(img);
+//				setTimeout(function(){
+//					document.body.removeChild(img)
+//				},500)
+//			}
+//			
+//			document.onmousemove=function(e){
+//				setInterval(function(){
+//					num++;
+//					num%=25;                                                                                               
+//					var img=document.createElement("img");
+//					img.src="img/qun_"+Math.floor(num/5)+".png";
+//					img.style.left=e.clientX+"px";
+//					img.style.top=e.clientY+"px";
+//					document.body.appendChild(img);
+//					setTimeout(function(){
+//						document.body.removeChild(img)
+//					},200)
+//				},500)
+//								
+//			}
+			var num=0;
+			
+			var a=0;
+			
+			document.onmousemove=function(e){	
+				a++;
+				if(a%2==0){
+					num++;
+					num%=25;		
+					var n=100;
+					var x=0;
+					var img=document.createElement("img");
+					img.src="img/qun_"+Math.floor(num/5)+".png";
+					img.style.left=e.clientX+"px";
+					img.style.top=e.clientY+"px";
+					
+					img.timer=setInterval(function(){						
+						n=n-15;
+						x=x+30;
+						img.style.top=(e.clientY-x)+"px";
+						img.style.width=(n)+"px";
+						img.style.height=(n)+"px";
+						if(n<=0){
+							clearInterval(img.timer)
+						}
+						console.log(e.clientY-x)
+					},100)		
+					
+					document.body.appendChild(img);
+					
+					setTimeout(function(){
+						document.body.removeChild(img);					
+					},1000)	
+				}
+					
+
+			}
+		</script>
+	</body>
+</html>
