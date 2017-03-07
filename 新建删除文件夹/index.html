@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			input{
+				margin: 0;
+				padding: 0;
+				border: 1px solid #000;
+			}
+			.item{
+				width: 80px;
+			    	float: left;
+			    	margin-right: 20px;
+			    	position: relative;
+			    	padding-left: 10px;
+			}
+			a{
+				text-decoration: none;
+				color: pink;
+				font-size: 12px;
+				
+			}
+			img{
+				border:none;
+				vertical-align: top;
+			}
+			span{
+				display: block;
+				text-align: center;
+				font-size: 14px;
+				cursor: pointer;
+			}
+			#box .check{
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+			.resetName{
+				width: 90px;
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				display: none;
+				margin-top: 10px;
+			}
+			.text1{
+				width: 70px;
+				float: left;
+			}
+			.oks{
+				float: left;
+				width: 5px;
+				color: #000;
+			}
+		</style>
+	</head>
+	<body>
+		<input type="button" value="新建文件夹" id="add" />
+		<input type="button" value="删除选中文件夹"  id="del"/>
+		<div id="box">
+			<!--<div class="item">
+				<img src="img/1.png" />
+				<input type="checkbox" />
+				<span>新建文件夹</span>
+				<div class="resetName">
+					<input type="text" class="text1" />
+					<input type="button" value="ok" class="oks" />
+					<a href="javascript:;" class="oks">ok</a>
+				</div>
+			</div>-->
+		</div>
+		<script>
+			//思路：
+			//当点击添加按钮的时候，动态生成div ,img ,input,span
+			//	每次生成一次判断页面当中有没有叫“新建文件夹”的，如果有，找出里面最大的值，让当前的内容在最大值基础上＋1；
+			//	点击span,span 隐藏，resetName显示出来
+			//	点击 oks的时候，如果内容为空的时候，弹出需要内容，否则，将当前的value赋给span的innerHTML .
+			//	
+			//当点击删除按钮的时候，判断所有的checkbox是否为true,如果为真，删除对应的父级。
+			
+			var add=document.getElementById("add");
+			var box=document.getElementById("box");
+			var del=document.getElementById("del");
+			add.onclick=function(){
+				var max=0;
+				var divs=document.createElement("div");
+				divs.className="item";
+				var img=document.createElement("img");
+				img.src="img/1.png";
+				img.onoff=false;
+				img.onclick=function(){
+					if(this.onoff==false){
+						img.src="img/2.png";
+					}else{
+						img.src="img/1.png";
+					}
+					this.onoff=!this.onoff;
+					
+				}
+				
+				var ips=document.createElement("input");
+				ips.type="checkbox";
+				ips.className="check";
+				ips.onclick=function(){
+					if(this.checked){
+						img.src="img/2.png";
+						img.onoff=true;
+					}else{
+						img.src="img/1.png";
+						img.onoff=false;
+					}
+										
+				}
+				var span=document.createElement("span");
+				for(var i=0;i<box.children.length;i++){
+					if(box.children[i].children[2].innerHTML.indexOf("新建文件夹")==0 && Number(box.children[i].children[2].innerHTML.substring(5))>=max ){
+						max=Number(box.children[i].children[2].innerHTML.substring(5))+1;					
+					}
+				}
+				//	点击span,span 隐藏，resetName显示出来
+				span.onclick=function(){
+					this.style.display="none";
+					resetName.style.display="block";
+				}				
+				span.innerHTML="新建文件夹"+max;
+				span
+				var resetName=document.createElement("div");
+				resetName.className="resetName";
+				var text1=document.createElement("input");
+				text1.type="text";
+				text1.className="text1";
+				var As=document.createElement("a");
+				As.href="javascript:;";
+				As.className="oks";
+				As.innerHTML="ok";
+				As.onclick=function(){
+					if(text1.value==""){
+						alert("请输入内容")
+					}else{
+						span.innerHTML=text1.value;
+						resetName.style.display="none";
+						span.style.display="block";
+					}
+				}				
+				resetName.appendChild(text1);
+				resetName.appendChild(As);
+				divs.appendChild(img);
+				divs.appendChild(ips);
+				divs.appendChild(span);
+				divs.appendChild(resetName);
+				box.appendChild(divs);
+			}
+			del.onclick=function(){
+				for(var i=0;i<box.children.length;i++){
+					
+					if(box.children[i].children[1].checked==true){
+						box.removeChild(box.children[i]);
+						i=i-1;
+						//当在for中循环删除某个东西的时候，i值在删除后需要重新定义。
+					}
+				}
+			}
+		</script>
+	</body>
+</html>
