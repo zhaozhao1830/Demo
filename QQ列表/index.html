@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body,
+			ul,
+			li,
+			h2 {
+				margin: 0;
+				padding: 0;
+				
+			}
+			h2{
+				cursor: pointer;
+			}
+			li {
+				list-style: none;
+			}
+		</style>
+		<link rel="stylesheet" type="text/css" href="qq.css" />
+	</head>
+
+	<body onselectstart="return false;">
+		<div class="wrap">
+			<div class="list">
+				<h2><span></span>我的好友</h2>
+				<ul>
+					<li>小佳Love</li>
+					<li>从来就是这么正经</li>
+					<li>leo是个胖子</li>
+					<li>momo不是陌陌</li>
+				</ul>
+				<h2><span></span>企业好友</h2>
+				<ul>
+					<li>习近平</li>
+					<li>普京</li>
+					<li>奥巴马</li>
+				</ul>
+				<h2><span></span>黑名单</h2>
+				<ul>
+					<li>安倍</li>
+					<li>杜特尔特</li>
+				</ul>
+			</div>
+		</div>
+		<script>
+			//整个qq列表的切换是由添加和去除掉class控制，h2如果是点击状态，添加class active,如果取消去掉active,列表里面的li也是通过添加和去除class实现
+			//需求1:当点击h2时,如果开关是false 状态去除掉其他h2的class和其他对应ul的class，并给所点击的h2添加class active,并将对应的ul的状态改成display block(需要用到index);
+			//      当再次点击的时候,通过开关控制去除掉class name,也可以
+			//需求2:在开关时关闭的状态下，当鼠标在li上面滑动的时候去除掉其他li的class,并给所滑动的对象添加class active,如果这个li时selected状态，则不添加，通过开关控制
+			//		当点击li的时候去除掉其他的li的class，给所点击的li添加selected class ，同时每个li开关为开
+			//      去除掉其他li的class可以写在一个函数里
+			var h2s=document.getElementsByTagName("h2");
+			var uls=document.getElementsByTagName("ul");
+			//给所有的h2添加点击事件
+			for(var i=0;i<h2s.length;i++){
+				h2s[i].index=i;
+				h2s[i].onoff=false;
+				h2s[i].onclick=function(){
+					console.log(this.onoff)
+					if(!this.onoff){
+							//去除掉其他h2的class和其他对应ul的class
+						for(var i=0;i<h2s.length;i++){
+							h2s[i].className="";
+							h2s[i].onoff=false;
+							uls[i].style.display="none";
+						}
+						//所点击的h2添加class active,并将对应的ul的状态改成display block(需要用到index);
+						this.className="active";
+						uls[this.index].style.display="block";
+						this.onoff=true;
+					}else{
+						this.className="";
+						uls[this.index].style.display="none";
+						this.onoff=false;
+					}
+					
+				}
+			}
+//			当点击li的时候去除掉其他的li的class，给所点击的li添加selected class ，同时每个li开关为开
+			var lis=document.getElementsByTagName("li");
+		//	去除掉其他li的class可以写在一个函数里;
+			function clear(){
+				for(var i=0;i<lis.length;i++){
+					lis[i].className="";
+					lis[i].onoff=false;
+				}
+			}
+			
+//			给所有的li添加点击事件
+			for(var i=0;i<lis.length;i++){
+				lis[i].onoff=false;//false为未被选中状态，true为选中状态
+				lis[i].onclick=function(){
+					clear();
+					if(!this.onoff){
+						this.className="selected";
+						this.onoff=true;
+					}else{
+						this.className="";
+						this.onoff=false;
+					}
+				}
+				lis[i].onmouseout=function(){
+					if(!this.onoff){
+						this.className="";	
+					}
+				}
+				lis[i].onmouseover=function(){
+//					当鼠标在li上面滑动的时候去除掉其他li的class,并给所滑动的对象添加class active,
+					if(!this.onoff){
+						this.className="active";
+					}
+				}
+			}
+			
+			
+			
+			//总结，当用开关控制是否添加class时，class的删除与开启必须与class的添加删除同步进行
+			//移入和点击之后的清除效果可以通过设置鼠标的移出来实现，
+			//如果li的开关为true则不清除class,否则清除class,就不用把所以的class都取消再添加了
+		</script>
+	</body>
+
+</html>
