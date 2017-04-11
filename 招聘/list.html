@@ -1,0 +1,221 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>招贤纳士-社会招聘</title>
+		<link href="style.css" rel="stylesheet" type="text/css" />
+		<!--<base target="_blank" />-->
+		<script src="js/data.js"></script>
+	</head>
+
+	<body>
+		<div id="wrap">
+			<div class="left">
+				<h2>招贤纳士</h2>
+				<ul>
+					<!--<li class="focus"><a href="javascript:;">社会招聘</a></li>
+      	<li><a href="javascript:;">校园招聘</a></li> -->
+				</ul>
+			</div>
+			<div class="right">
+				<div class="title">
+					<img src="img/shzp.gif" />
+				</div>
+				<div class="info" id="info1">
+
+					<!-- <p class="zp">
+        	<span><a href="">★ 职位需求：测试工程师【社会招聘】</a></span>
+          <span>需求人数：2名</span>
+         	<span class="date">2013年7月30日</span>
+        </p>
+      	<p class="yq">1.计算机或相关专业本科以上学历；2.从事软件测试工作3年及以上；3.具备良好的沟通能力和快速学习能力；4.精通测试策略和方法、测试用例设计；5.熟悉DB2、AIX等平台的基本操作；6.具备2年以上金...[<a href="">查看详情</a>]
+        </p>
+
+      	<p class="zp">
+        	<span><a href="">★ 职位需求：测试工程师【社会招聘】</a></span>
+          <span>需求人数：12名</span>
+         	<span class="date">2013年7月30日</span>
+        </p>
+      	<p class="yq">1.计算机或相关专业本科以上学历；2.从事软件测试工作3年及以上；3.具备良好的沟通能力和快速学习能力；4.精通测试策略和方法、测试用例设计；5.熟悉DB2、AIX等平台的基本操作；6.具备2年以上金...[<a href="">查看详情</a>]
+        </p>
+
+      	<p class="zp">
+        	<span><a href="">★ 职位需求：测试工程师【社会招聘】</a></span>
+          <span>需求人数：21名</span>
+         	<span class="date">2013年7月30日</span>
+        </p>
+      	<p class="yq">1.计算机或相关专业本科以上学历；2.从事软件测试工作3年及以上；3.具备良好的沟通能力和快速学习能力；4.精通测试策略和方法、测试用例设计；5.熟悉DB2、AIX等平台的基本操作；6.具备2年以上金...[<a href="">查看详情</a>]
+        </p> -->
+
+				</div>
+				<div class="pages">
+					<span class="prev" id="prev1">
+          <a href="javascript:;">
+            <img src="img/pre.gif">
+          </a>
+        </span>
+					<span class="next" id="next1">
+          <a href="javascript:;">
+            <img src="img/next.gif">
+          </a>
+        </span>
+					<p id="page1">
+						<!--<span class="focus">
+            <a href="javascript:;">1</a>
+          </span>
+          <span>
+            <a href="javascript:;">2</a>
+          </span>
+          <span>
+            <a href="javascript:;">3</a>
+          </span> -->
+					</p>
+
+				</div>
+
+			</div>
+			<div class="clear"></div>
+		</div>
+		<script type="text/javascript">
+			var lList = document.querySelector('.left ul');
+			var rTitle = document.querySelector('.right .title img');
+			var rInfo = document.getElementById('info1');
+			var rPrev = document.querySelector('#prev1 a');
+			var rNext = document.querySelector('#next1 a');
+			var rPage = document.getElementById('page1');
+			
+			var zp = {
+				init: function(sea, hash) {
+					this.list(sea);
+					this.page(sea, hash);
+				},
+				list: function(sea) {//生成左侧列表
+					var str = '';
+					for (var i = 0; i < aData.list.length; i++) {
+						if(aData.list[i].lx == sea) {
+							str += '<li class="focus"><a href="list.html?' + aData.list[i].lx + '">' + aData.list[i].text + '</a></li>';
+						}else {
+							str += '<li><a href="list.html?' + aData.list[i].lx + '">' + aData.list[i].text + '</a></li>';
+						}
+					}
+					lList.innerHTML = str;
+					rTitle.src = 'img/' + sea + 'zp.gif';
+				},
+				page: function(list, now, num = 2) {//生成页码区域
+					now = parseInt(now);
+					var str = '';
+					var page = Math.ceil(aData[list].text.length/num);
+					for (var i = 0; i < page; i++) {
+						if(now == i) {
+							str += '<span class="focus"><a href="list.html?' + list + '#' + i + '">' + (i+1) + '</a></span>';
+						}else {
+							str += '<span><a href="list.html?' + list + '#' + i + '">' + (i+1) + '</a></span>';
+						}
+					}
+					rPage.innerHTML = str;
+					rPrev.href = 'list.html?' + list + '#' + (now-1<0 ? 0 : now-1);
+					rNext.href = 'list.html?' + list + '#' + (now+1>page-1 ? page-1 : now+1);
+					this.content(list, now, num);//根据页码不同生成页面主体内容
+				},
+				content: function(list, now, num) {
+					var str = '';
+					var info = '';
+					var arr = aData[list].text.slice(now*num, now*num + num);//截取需要渲染的数据
+	        			for (var i = 0; i < arr.length; i++) {
+	        				str += '<p class="zp">';
+	        				str += '<span><a href="content.html?' + list + '#' + (now*num + i) + '">★ ';
+	        				str += arr[i].zw;
+	        				str += '</a></span><span>需求人数：';
+	        				str += arr[i].rs;
+	        				str += '名</span><span class="date">';
+	        				str += aData.date(arr[i].sj);
+	        				str += '</span></p><p class="yq">';
+	        				for (var j = 0; j < arr[i].info.length; j++) {
+	        					info += arr[i].info[j].l;
+	        				}
+	        				str += info.substr(0, 105) + '...';
+	        				str += '[<a href="content.html?' + list + '#' + (now*num + i) + '">';
+	        				str += '查看详情</a>]</p>';
+	        			}
+        				rInfo.innerHTML = str;
+				}
+			}
+			
+			var sea = window.location.search.substr(1) || 'sh';
+			var hash = window.location.hash.substr(1) || 0;
+			
+			zp.init(sea, hash);
+			
+//			init: function(sea, hash) {
+//				this.list(sea);sh
+//				this.page(sea, hash);sh 0
+//			},
+
+//			list: function(sea) {此函数的作用是生成左侧内容，并给左侧内容添加href链接，链接地址直接对应他的内容，并且给右侧的img添加了一个src.生成与功能并存
+//				var str = '';
+//				for (var i = 0; i < aData.list.length; i++) {
+//					if(aData.list[i].lx == sea) {//判断当前的search是sh 还是xy,如果是sh的话，给他添加一个class，a标签给他一个链接，链接地址为list,问号后面跟的是sh或者xy.hash为空。
+//						str += '<li class="focus"><a href="list.html?' + aData.list[i].lx + '">' + aData.list[i].text + '</a></li>';
+//					}else {//如果当前的li不是sh,那么没有class,href的？后面为这个代表的招聘类型
+//						str += '<li><a href="list.html?' + aData.list[i].lx + '">' + aData.list[i].text + '</a></li>';
+//					}
+//				}
+//				lList.innerHTML = str;
+//				rTitle.src = 'img/' + sea + 'zp.gif';
+//			｀},
+							
+//				page: function(list, now, num = 2) {／／生成页码，并添加点击效果
+			//list,对应上？后面的search为多少。
+			//now，对应＃后面的hash是多少。
+			//num=2,表示整个页面显示两条招聘信息。
+//					now = parseInt(now);
+//					var str = '';
+//					var page = Math.ceil(aData[list].text.length/num);
+//					for (var i = 0; i < page; i++) {／／生成页面中的翻页标签。
+//						if(now == i) {如果当前的页码与hash值相同，那么给他添加一个class.a的链接地址中search和hash也变成当前的search 和 i，
+//							str += '<span class="focus"><a href="list.html?' + list + '#' + i + '">' + (i+1) + '</a></span>';
+//						}else {
+//							str += '<span><a href="list.html?' + list + '#' + i + '">' + (i+1) + '</a></span>';
+//						}
+//					}
+//					rPage.innerHTML = str;
+//					rPrev.href = 'list.html?' + list + '#' + (now-1<0 ? 0 : now-1);
+//					rNext.href = 'list.html?' + list + '#' + (now+1>page-1 ? page-1 : now+1);
+//					this.content(list, now, num);
+//				},
+
+//				content: function(list, now, num) {作用是生成页面内容，
+//					var str = '';
+//					var info = '';
+//					var arr = aData[list].text.slice(now*num, now*num + num);//arr根据当前的search 和hash 动态截取两个。
+//	        			for (var i = 0; i < arr.length; i++) {
+//	        				str += '<p class="zp">';
+//	        				str += '<span><a href="content.html?' + list + '#' + (now*num + i) + '">★ ';//a的href里面，动态为对应的地址。
+//	        				str += arr[i].zw;					／／内容为arr的中第i个的zw.
+//	        				str += '</a></span><span>需求人数：';
+//	        				str += arr[i].rs;
+//	        				str += '名</span><span class="date">';
+//	        				str += aData.date(arr[i].sj);
+//	        				str += '</span></p><p class="yq">';
+//	        				for (var j = 0; j < arr[i].info.length; j++) {
+//	        					info += arr[i].info[j].l;
+//	        				}
+//	        				str += info.substr(0, 105) + '...';
+//	        				str += '[<a href="content.html?' + list + '#' + (now*num + i) + '">';//详情里面对应的地址也是同标题的
+//	        				str += '查看详情</a>]</p>';
+//	        			}
+//      				rInfo.innerHTML = str;
+//				}
+
+
+
+			
+			window.onhashchange = function() {
+				var sea = window.location.search.substr(1) || 'sh';
+				var hash = window.location.hash.substr(1) || 0;
+				zp.page(sea, hash);
+			}
+		</script>
+	</body>
+</html>
