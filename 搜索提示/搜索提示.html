@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        input{
+            width: 100%;
+            height: 30px;
+        }
+        ul{
+            margin: 0;
+            padding: 0;
+            display: none;
+        }
+        li{
+            list-style: none;
+            background-color: #009999;
+            margin-top: 3px;
+            line-height: 30px;
+            width: 100%;
+        }
+        a{
+            text-decoration: none;
+            color:white;
+            display: block;
+            width: 100%;
+        }
+       /* a:hover,*/
+        .hover{
+            background-color: #00FF99;
+        }
+        #box{
+            width: 500px;
+            margin: 100px auto 0;
+        }
+        .select{
+            background-color: #60625b;
+        }
+    </style>
+    
+</head>
+<body>
+<div id="box">
+    <input type="text" id="s"/>
+    <ul id="list">
+        <li><a href="javascript:;">《第七个读者》</a></li>
+        <li><a href="javascript:;">《 心理罪 画像》</a></li>
+        <li><a href="javascript:;">《 心理罪 教化场》</a></li>
+        <li><a href="javascript:;">《 心理罪 暗河》</a></li>
+        <li><a href="javascript:;">《 心理罪 城市之光》</a></li>
+        <li><a href="javascript:;">《地球往事》</a></li>
+        <li><a href="javascript:;">《黑暗森林》</a></li>
+        <li><a href="javascript:;">《死神永生》</a></li>
+        <li><a href="javascript:;">《乡村教师》</a></li>
+        <li><a href="javascript:;">《地球大炮》</a></li>
+    </ul>
+    <script>
+    		var s=document.getElementById("s");
+    		var list=document.getElementById("list");
+    		var aS=document.getElementsByTagName("a");
+    		var last=0;
+    		var lastk=0;
+    		var num=-1;
+    		
+    		s.addEventListener("click",function(ev){
+    			list.style.display="block";
+    			ev.stopPropagation();
+    		})
+    		
+		document.onclick=function(){
+			list.style.display="none";
+		}
+		
+		for(var i=0;i<aS.length;i++){
+			aS[i].onoff=false;
+			aS[i].index=i;
+		}
+		
+		list.onmouseover=function(ev){
+			if(ev.target!=list){
+				ev.target.className="hover";
+				num=ev.target.index;
+			}
+			
+		}
+		list.onmouseout=function(ev){
+			if(ev.target!=list){
+				if(ev.target.onoff==false){
+					ev.target.className="";
+				}else{
+					ev.target.className="select";
+				}
+			}
+			
+		}
+		
+      	list.onclick=function(ev){
+      		ev.cancelBubble=true;
+      		s.focus();
+			if(ev.target!=list){		
+
+				if(ev.shiftKey==false){
+					if(ev.target.onoff==false){
+						for(var i=0;i<aS.length;i++){
+							aS[i].className="";
+							aS[i].onoff=false;
+						}
+	  					
+			    			ev.target.className="select";
+			    			s.value=ev.target.innerHTML;
+
+			    			ev.target.onoff=true;
+	  				}else{
+	  					for(var i=0;i<aS.length;i++){
+	  						aS[i].className="";
+	  						aS[i].onoff=false;
+	  					}
+	  					ev.target.className="";
+			    			s.value="";	
+			    			ev.target.onoff=false;
+	  				}
+				}else{
+					if(ev.target.onoff==false){
+						ev.target.className="select";
+			    			s.value+=ev.target.innerHTML;
+			    			ev.target.onoff=true;
+					}else{
+						var strCon=ev.target.innerHTML;
+						ev.target.className="";
+						s.value=s.value.split(strCon).join('');	
+						ev.target.onoff=false;
+					}
+				}	
+			}
+			
+      	}
+   
+      	document.onkeydown=function(ev){   
+      		
+      		if(ev.keyCode==38){//向上
+      			num--;
+      			if(num<0){
+      				num=aS.length-1;
+      			}
+      			for(var i=0;i<aS.length;i++){
+      				if(!aS[i].onoff){
+      					aS[i].className="";
+      				}else{
+      					aS[i].className="select";
+      				}
+      			}
+		
+	      		aS[num].className="hover";	      			
+      			lastk=num;
+      		}
+      		
+      		if(ev.keyCode==40){//向下
+				num++;
+      			num%=aS.length;
+      			for(var i=0;i<aS.length;i++){
+      				if(!aS[i].onoff){
+      					aS[i].className="";
+      				}else{
+      					aS[i].className="select";
+      				}
+      			}      				   			
+	      		aS[num].className="hover";	      			
+      			lastk=num;
+      			
+      		}
+      		
+      		if(ev.keyCode==13 && ev.shiftKey==false){//只按下enter键
+        			
+      			if(aS[num].onoff==false){
+      				console.log(num)
+					for(var i=0;i<aS.length;i++){  						  					
+  						aS[i].className="";
+	  					s.value="";
+	  					aS[i].onoff=false;	  					
+	  				}
+
+      				aS[num].className="select";
+      				s.value=aS[num].innerHTML;
+      				aS[num].onoff=true;
+      				
+      			}else{
+      				for(var i=0;i<aS.length;i++){
+      					aS[i].className="";
+      					aS[i].onoff=false;
+      				}
+      				aS[num].className="";
+      				s.value="";
+      				aS[num].onoff=false;
+       				
+      			}
+      			
+      		}
+      		if(ev.keyCode==13 && ev.shiftKey==true){//按下shift+enter
+      			if(aS[num].onoff==false){
+      				aS[num].className="select";
+      				s.value+=aS[num].innerHTML;
+      				aS[num].onoff=true;
+      			}else{
+      				aS[num].className="";
+      				s.value=s.value.split(aS[num].innerHTML).join('');	;
+      				aS[num].onoff=false;
+      			}
+      				
+      		}
+      		
+      	}
+      	
+      	
+      	
+      	
+      	
+      	
+//		document.onkeydown=function(ev){
+//			if(ev.keyCode==91){
+//				for(var i=0;i<aS.length;i++){
+//					aS[i].onoff=false;
+//					aS[i].onclick=function(e){
+//						if(e.keyCode)
+//						if(this.onoff==false){
+//							this.className="select";
+//				    			s.value+=this.innerHTML;
+//	
+//						}else{
+//							this.className="";
+//							s.value=s.value.split(this.innerHTML).join('');
+//							
+//						}
+//						this.onoff=!this.onoff;						
+//					}
+//					console.log(aS[i].onoff)
+//				}
+//
+//			}
+//		}
+//
+//		document.onclick=function(ev){
+//			console.log(ev);
+////			console.log(ev.altKey)
+//		}
+		
+		
+//		var lis=document.getElementsByTagName("li");
+//		
+//		for(var i=0;i<lis.length;i++){
+//			lis[i].index=i;
+//			lis[i].onoff=false;
+//			lis[i].onclick=function(){
+//				if(this.onoff==false){
+//					for(var i=0;i<lis.length;i++){
+//						lis[i].className="";
+//						lis[i].onoff=false;
+//					}
+//					this.className="select";
+//  					s.value=aS[this.index].innerHTML;
+//				}else{
+//					this.className="";
+//  					s.value="";
+//				}
+//				this.onoff=!this.onoff
+//			}
+//		}
+    		
+    		
+    		
+    		
+    </script>
+</div>
+</body>
+</html>
