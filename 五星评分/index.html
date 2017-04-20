@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>百度评分</title>
+		<style>
+			body,h1,h2 {
+				margin: 0;
+				padding: 0;
+				-webkit-font-smoothing: antialiased;
+			}
+			h2{
+				display: inline-block;
+				margin: 24px 0 0 124px;
+			}
+		</style>
+		<link rel="stylesheet" type="text/css" href="pingfen.css"/>
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="baidu">
+				<div class="caption">
+					<!--<h1></h1>-->
+					<h2>百度评分</h2>
+					<span>总体评价</span>
+				</div>
+				<div class="context">
+					<div class="starts">
+						<span>☆</span>
+						<span>☆</span>
+						<span>☆</span>
+						<span>☆</span>
+						<span>☆</span>
+					</div>
+					<div class="info"></div>
+				</div>
+				<div class="tips">
+					小提示：点击星星就能打分★
+				</div>
+			</div>
+		</div>
+		<script>
+			var arrText=["极差","一般","较好","不错","力推"];
+			//思路：因为鼠标移入的时候，要将之前的span的背景改变，所以封装一个函数，函数的作用是将参数n之前的span变更
+			//     背景色，info的内容也就是arrText［n］,如果n<1 为一种颜色，如果n>1为一种颜色，
+			//		数据和展示要分开写，
+			//		然后当鼠标移入的时候调用函数，将之前的span改变颜色，
+			//展示函数
+			var starts=document.getElementsByClassName("starts")[0];
+			var spans=starts.getElementsByTagName("span");
+			var info=document.getElementsByClassName("info")[0];
+			function tab(n){
+				
+				for(var i=0;i<spans.length;i++){
+					spans[i].innerHTML="☆";	
+					spans[i].style.color="grey";		
+				}
+				for(var i=0;i<=n;i++){
+					if(n<=1){
+						spans[i].innerHTML="★";	
+						spans[i].style.color="pink";						
+					}					
+					if(n>1){
+						spans[i].innerHTML="★";	
+						spans[i].style.color="palevioletred";							
+					}
+				}
+				if(n==-1){
+					info.style.display="none";
+				}else{
+					info.style.display="block";
+					info.innerHTML=arrText[n];
+				}
+				
+			}
+			var num=-1;
+			for(var i=0;i<spans.length;i++){				
+				spans[i].index=i;				
+				spans[i].onmouseover=function(){
+					tab(this.index);
+				}
+				spans[i].onclick=function(){
+					num=this.index;
+				}
+				spans[i].onmouseout=function(){					
+					tab(num);
+					
+				}
+			}
+			//如果这个变量在其他函数中也需要用到，就把它设置为全局变量
+			//当鼠标移入的时候，调用显示函数，当鼠标点击的时候保存一个变量，鼠标移出的时候，继续执行显示函数，参数为点击时的变量
+		</script>
+	</body>
+</html>
