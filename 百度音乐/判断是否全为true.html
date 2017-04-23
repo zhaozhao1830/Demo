@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body,
+			ul,
+			li {
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			#list div{
+				color: #fff;
+			}
+		</style>
+		<link rel="stylesheet" type="text/css" href="baidu.css" />
+	</head>
+
+	<body>
+		<div class="wrap">
+			<div class="baidu">
+				<ul id="list">
+					<li>
+						<div></div>
+						<span>泡沫</span>
+						<span>邓紫棋</span>
+					</li>
+					<li>
+						<div></div>
+						<span>说爱你</span>
+						<span>蔡依林</span>
+					</li>
+					<li>
+						<div></div>
+						<span>稻香</span>
+						<span>周杰伦</span>
+					</li>
+					<li>
+						<div></div>
+						<span>我的梦</span>
+						<span>张靓颖</span>
+					</li>
+					<li>
+						<div></div>
+						<span>怎么说我不爱你</span>
+						<span>萧敬腾</span>
+					</li>
+					<li>
+						<div>️</div>
+						<span>无处安放</span>
+						<span>白若溪</span>
+					</li>
+				</ul>
+				<div class="select">
+					<span class="selectAll"><span>全选</span></span>
+					<div class="others">
+						<span><em></em>收藏</span>
+						<span><em></em>添加</span>
+						<span><em></em>删除</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			var list=document.getElementById("list");
+			var lis=list.getElementsByTagName("li");
+			var divs=list.getElementsByTagName("div");
+			var selectAll=document.getElementsByClassName("selectAll")[0];
+			selectAll.onoff=false;
+			var num=0;
+			//封装一个函数，用来控制点击，移入，移出的的颜色变化;
+			//在鼠标移入，移出，点击的时候分别调用这个函数，
+			//点击的时候开一个开关，将前前面div的innerHTML打勾，再次点击的时候将前面的勾去掉
+			//做一个for循环，当所有的li的开关都是开着的时候，将下面span 的打勾，
+			//点击下面的span,开一个开关，勾选所有的li,并调用颜色函数，再次点击去掉所有的li,并再次执行颜色函数。
+			for(var i=0;i<lis.length;i++){
+				lis[i].style.background=i%2?"rgba(200,0,0,0)":"rgba(200,0,0,.1)";
+			}
+			function color(n){
+				if(num==0){					
+					lis[n].style.background=n%2?"rgba(200,0,0,0)":"rgba(200,0,0,.1)";
+					lis[n].style.color="black";
+				}				
+				if(num==1){
+					lis[n].style.background="rgba(200,0,0,.3)";
+				}
+				if(num==2){
+					lis[n].style.background="rgba(255,0,0,.8)";
+					lis[n].style.color="#fff";
+				}
+			}
+			
+			for(var i=0;i<lis.length;i++){
+				lis[i].index=i;
+				lis[i].onoff=false;
+				lis[i].onmouseover=function(){
+					if(this.onoff==false){
+						num=1;
+						color(this.index);
+					}
+				}
+					
+				lis[i].onmouseout=function(){
+					if(this.onoff==false){
+						num=0;
+						color(this.index);
+					}
+
+				}
+				lis[i].onclick=function(){
+					if(this.onoff==false){
+						num=2;
+						color(this.index);
+						divs[this.index].innerHTML="√";
+						
+					}else{
+						num=0;
+						color(this.index);
+						divs[this.index].innerHTML="";
+					}
+					
+					this.onoff=!this.onoff;
+					checkAll();
+				}
+			}
+			
+			function checkAll(){
+				for(var i=0;i<lis.length;i++){
+					if(lis[i].onoff==false){	
+						selectAll.onoff=false;
+						selectAll.innerHTML="<span>全选</span>";	
+						return;	
+					}					
+				}
+				selectAll.onoff=true;
+				selectAll.innerHTML="√ <span>全选</span>";	
+				
+			}
+			selectAll.onclick=function(){
+				if(this.onoff==false){
+					this.innerHTML="√ <span>全选</span>";
+					num=2;
+					for(var i=0;i<lis.length;i++){
+						color(i);
+						lis[i].onoff=true;
+						divs[i].innerHTML="√"
+					}					
+				}else{
+					this.innerHTML="<span>全选</span>";
+					num=0;
+					for(var i=0;i<lis.length;i++){
+						color(i);
+						lis[i].onoff=false;
+						divs[i].innerHTML="";
+					}	
+				}
+				this.onoff=!this.onoff;
+			}
+		//因为判断是否给全选加勾是在点击li点击的时候做的判断，而且是本次点击完成之后做的判断，
+		//		所以要把函数放在点击函数的下面
+		//全选判断思路：遍历所有的li,如果有一个li的开关是false，那么全选的开关也是false,就跳出该函数，下面的代码不执行
+		//	如果所有li,开关是false这个条件不成立，那么在for循环之外，将全选的开关变成true,将全选勾选。
+			
+		</script>
+	</body>
+
+</html>
